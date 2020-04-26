@@ -17,6 +17,9 @@ test('it can generate media queries from configured screen sizes', () => {
     @screen lg {
       .banana { color: green; }
     }
+    @screen sm, lg {
+      .banana { opacity: 0.5; }
+    }
   `
 
   const output = `
@@ -28,6 +31,12 @@ test('it can generate media queries from configured screen sizes', () => {
       }
       @media (min-width: 1000px) {
         .banana { color: green; }
+      }
+      @media (min-width: 500px) {
+        .banana { opacity: 0.5; }
+      }
+      @media (min-width: 1000px) {
+        .banana { opacity: 0.5; }
       }
   `
 

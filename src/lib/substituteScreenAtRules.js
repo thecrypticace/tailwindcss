@@ -4,14 +4,19 @@ import buildMediaQuery from '../util/buildMediaQuery'
 export default function({ theme }) {
   return function(css) {
     css.walkAtRules('screen', atRule => {
-      const screen = atRule.params
+      const screens = atRule.params.split(/\s*,\s*/g)
 
-      if (!_.has(theme.screens, screen)) {
-        throw atRule.error(`No \`${screen}\` screen found.`)
-      }
+      screens.forEach(screen => {
+        if (!_.has(theme.screens, screen)) {
+          throw atRule.error(`No \`${screen}\` screen found.`)
+        }
 
-      atRule.name = 'media'
-      atRule.params = buildMediaQuery(theme.screens[screen])
+        const rule = atRule.cloneBefore()
+        rule.name = 'media'
+        rule.params = buildMediaQuery(theme.screens[screen])
+      })
+
+      atRule.remove()
     })
   }
 }
